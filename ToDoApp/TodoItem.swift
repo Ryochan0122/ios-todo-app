@@ -19,6 +19,14 @@ enum Priority: Int, Codable, CaseIterable, Identifiable {
         case .high: return "高"
         }
     }
+
+    var color: Color {
+        switch self {
+        case .low: return .gray
+        case .medium: return .orange
+        case .high: return .red
+        }
+    }
 }
 
 enum RepeatRule: Codable, Equatable {
@@ -37,16 +45,6 @@ struct Subtask: Identifiable, Codable, Equatable {
         self.id = id
         self.title = title
         self.isDone = isDone
-    }
-}
-
-struct PriorityTestView: View {
-    var body: some View {
-        VStack {
-            ForEach(Priority.allCases) { p in
-                Text(p.label)
-            }
-        }
     }
 }
 
