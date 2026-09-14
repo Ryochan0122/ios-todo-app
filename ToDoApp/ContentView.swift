@@ -30,12 +30,16 @@ struct ContentView: View {
                 .padding()
 
                 List {
-                    ForEach(store.todos) { todo in
+                    ForEach(store.todos.sorted(by: { $0.priority.rawValue > $1.priority.rawValue })) { todo in
                         HStack {
+                            Circle()
+                                .fill(todo.priority.color)
+                                .frame(width: 10, height: 10)
                             Text(todo.title)
                                 .strikethrough(todo.isDone)
                             Spacer()
                             Text(todo.priority.label)
+                                .foregroundStyle(todo.priority.color)
                         }
                         .onTapGesture {
                             store.toggleDone(todo)
