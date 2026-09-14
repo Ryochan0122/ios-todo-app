@@ -3,18 +3,29 @@ import SwiftUI
 struct ContentView: View {
     @StateObject private var store = TodoStore()
     @State private var newTitle = ""
+    @State private var selectedPriority: Priority = .medium
 
     var body: some View {
         NavigationStack {
             VStack {
-                HStack {
-                    TextField("新しいタスク", text: $newTitle)
-                        .textFieldStyle(.roundedBorder)
-                    Button("追加") {
-                        guard !newTitle.isEmpty else { return }
-                        store.addTodo(TodoItem(title: newTitle))
-                        newTitle = ""
+                VStack(spacing: 8) {
+                    HStack {
+                        TextField("新しいタスク", text: $newTitle)
+                            .textFieldStyle(.roundedBorder)
+                        Button("追加") {
+                            guard !newTitle.isEmpty else { return }
+                            store.addTodo(TodoItem(title: newTitle, priority: selectedPriority))
+                            newTitle = ""
+                            selectedPriority = .medium
+                        }
                     }
+
+                    Picker("重要度", selection: $selectedPriority) {
+                        ForEach(Priority.allCases) { priority in
+                            Text(priority.label).tag(priority)
+                        }
+                    }
+                    .pickerStyle(.segmented)
                 }
                 .padding()
 
