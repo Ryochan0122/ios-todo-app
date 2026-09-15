@@ -19,7 +19,7 @@ struct ContentView: View {
                             selectedPriority = .medium
                         }
                     }
-
+                    
                     Picker("重要度", selection: $selectedPriority) {
                         ForEach(Priority.allCases) { priority in
                             Text(priority.label).tag(priority)
@@ -28,7 +28,7 @@ struct ContentView: View {
                     .pickerStyle(.segmented)
                 }
                 .padding()
-
+                
                 List {
                     ForEach(store.todos.sorted(by: { $0.priority.rawValue > $1.priority.rawValue })) { todo in
                         HStack {
@@ -44,19 +44,23 @@ struct ContentView: View {
                         .onTapGesture {
                             store.toggleDone(todo)
                         }
-                    }
-                    .onDelete { indexSet in
-                        for index in indexSet {
-                            store.deleteTodo(store.todos[index])
+                        .swipeActions {
+                            Button(role: .destructive) {
+                                store.deleteTodo(todo)
+                            } label: {
+                                Label("削除", systemImage: "trash")
+                            }
                         }
                     }
                 }
+                .navigationTitle("TODOリスト")
             }
-            .navigationTitle("TODOリスト")
         }
     }
 }
+    
 
 #Preview {
     ContentView()
 }
+
